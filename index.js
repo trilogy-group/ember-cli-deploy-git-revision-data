@@ -13,35 +13,33 @@ module.exports = {
       name: options.name,
 
       setup: function(context) {
-        context._gitRepoInfo = context._gitInfoLib || require('git-repo-info');
-      },
+       var client = context._gitInfoLib || require('git-repo-info');
 
-      prepare: function(context) {
-        var path = context._gitRepoInfo._findRepo();
+       var path = client._findRepo();
 
-        if (path === null) {
-          this.log('No git repo detected', { verbose: true });
-          return Promise.resolve();
-        }
+       if (path === null) {
+         this.log('No git repo detected', { verbose: true });
+         return Promise.resolve();
+       }
 
-        var info = context._gitRepoInfo(path);
+       var info = client(path);
 
-        var revisionData = Object.keys(info)
-          .reduce(function(data, key) {
-            if (info[key] && key !== 'root') {
-              data[key] = info[key];
-            }
+       var revisionData = Object.keys(info)
+         .reduce(function(data, key) {
+           if (info[key] && key !== 'root') {
+             data[key] = info[key];
+           }
 
-            return data;
-          }, {});
+           return data;
+         }, {});
 
-        if (Object.keys(revisionData).length) {
-          return Promise.resolve({
-            revisionData: {
-              git: revisionData
-            }
-          });
-        }
+       if (Object.keys(revisionData).length) {
+         return Promise.resolve({
+           revisionData: {
+             git: revisionData
+           }
+         });
+       }
 
         return Promise.resolve();
       }
