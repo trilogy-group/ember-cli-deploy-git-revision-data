@@ -3,7 +3,7 @@
 var subject = require('../../index');
 var assert  = require('../helpers/assert');
 
-describe('Git Revision Data | prepare hook', function() {
+describe('Git Revision Data | setup hook', function() {
   var mockUi;
 
   beforeEach(function() {
@@ -38,9 +38,8 @@ describe('Git Revision Data | prepare hook', function() {
 
     instance.beforeHook(context);
     instance.configure(context);
-    instance.setup(context);
 
-    return assert.isFulfilled(instance.prepare(context))
+    return assert.isFulfilled(instance.setup(context))
       .then(function(result) {
         assert.equal(mockUi.messages.pop(), '\u001b[34m- No git repo detected\u001b[39m');
         assert.isUndefined(result);
@@ -68,9 +67,8 @@ describe('Git Revision Data | prepare hook', function() {
 
     instance.beforeHook(context);
     instance.configure(context);
-    instance.setup(context);
 
-    return assert.isFulfilled(instance.prepare(context))
+    return assert.isFulfilled(instance.setup(context))
       .then(function(result) {
         assert.equal(mockUi.messages.length, 2);
         assert.isUndefined(result);
@@ -103,9 +101,8 @@ describe('Git Revision Data | prepare hook', function() {
 
     instance.beforeHook(context);
     instance.configure(context);
-    instance.setup(context);
 
-    return assert.isFulfilled(instance.prepare(context))
+    return assert.isFulfilled(instance.setup(context))
       .then(function(result) {
         assert.deepEqual(result, {
           revisionData: {
