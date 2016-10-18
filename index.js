@@ -14,15 +14,12 @@ module.exports = {
 
       setup: function(context) {
        var client = context._gitInfoLib || require('git-repo-info');
+       var info   = client(context.project.root);
 
-       var path = client._findRepo();
-
-       if (path === null) {
+       if (!info || info.root === null) {
          this.log('No git repo detected', { verbose: true });
          return Promise.resolve();
        }
-
-       var info = client(path);
 
        var revisionData = Object.keys(info)
          .reduce(function(data, key) {

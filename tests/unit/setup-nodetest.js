@@ -5,6 +5,7 @@ var assert  = require('../helpers/assert');
 
 describe('Git Revision Data | setup hook', function() {
   var mockUi;
+  var mockProject;
 
   beforeEach(function() {
     mockUi = {
@@ -15,6 +16,10 @@ describe('Git Revision Data | setup hook', function() {
         this.messages.push(message);
       }
     };
+
+    mockProject = {
+      root: ''
+    };
   });
 
   it('returns undefined when git repo can\'t be found', function() {
@@ -23,15 +28,12 @@ describe('Git Revision Data | setup hook', function() {
     });
 
     var lib = function() {
-      return {};
-    };
-
-    lib._findRepo = function() {
-      return null;
+      return { root: null };
     };
 
     var context = {
       ui: mockUi,
+      project: mockProject,
       config: {},
       _gitInfoLib: lib
     };
@@ -46,35 +48,6 @@ describe('Git Revision Data | setup hook', function() {
       });
   });
 
-  it('returns undefined if no git data is available', function() {
-    var instance = subject.createDeployPlugin({
-      name: 'git-revision-data'
-    });
-
-    var lib = function() {
-      return {};
-    };
-
-    lib._findRepo = function() {
-      return process.cwd();
-    };
-
-    var context = {
-      ui: mockUi,
-      config: {},
-      _gitInfoLib: lib
-    };
-
-    instance.beforeHook(context);
-    instance.configure(context);
-
-    return assert.isFulfilled(instance.setup(context))
-      .then(function(result) {
-        assert.equal(mockUi.messages.length, 2);
-        assert.isUndefined(result);
-      });
-  });
-
   it('returns returns available git repo info', function() {
     var instance = subject.createDeployPlugin({
       name: 'git-revision-data'
@@ -85,16 +58,14 @@ describe('Git Revision Data | setup hook', function() {
         sha: 'foo',
         abbreviatedSha: 'bar',
         committer: 'baz',
-        branch: 'woop'
+        branch: 'woop',
+        root: process.cwd()
       };
-    };
-
-    lib._findRepo = function() {
-      return process.cwd();
     };
 
     var context = {
       ui: mockUi,
+      project: mockProject,
       config: {},
       _gitInfoLib: lib
     };
