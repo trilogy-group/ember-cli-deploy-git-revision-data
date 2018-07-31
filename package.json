@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-deploy-git-revision-data",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An EmberCLI Deploy plugin to add git related metadata for the current revision to the context",
   "directories": {
     "doc": "doc",
